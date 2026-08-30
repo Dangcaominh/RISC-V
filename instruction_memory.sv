@@ -5,7 +5,7 @@ module instruction_memory #(
     input logic imem_req,           // Read enable
     input logic [31:0] imem_addr,   // Byte address (word-aligned)
     output logic [31:0] imem_data   // Output instruction
-)
+);
 
 // ----------------------------------------------
 // Memory declaration (ROM)
@@ -18,7 +18,7 @@ initial begin
 end
 
 always_comb begin
-    if(imem_reg) begin
+    if(imem_req) begin
         imem_data = {mem[imem_addr], mem[imem_addr + 1], mem[imem_addr + 2], mem[imem_addr + 3]};
     end else begin
         imem_data = 32'd0;
