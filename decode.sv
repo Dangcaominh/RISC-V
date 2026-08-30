@@ -6,7 +6,7 @@ module decode (
     output logic [4:0] rs1_addr,
     output logic [4:0] rs2_addr,
     output logic [4:0] rd_addr,
-    output logic [6:0] optcode,
+    output optcode_t optcode,
     output logic [2:0] func3,
     output logic [6:0] func7,
 
@@ -28,7 +28,40 @@ logic [31:0] imm_j_type;
 
 assign imm_i_type = {{20{instruction[31]}}, instruction[31:20]};
 assign imm_s_type = {{20{instruction[31]}}, instruction[31:25], instruction[11:7]};
-assign imm_b_type = {{19{instruction[31]}}, instruction[7], instruction[30:25],  instruction[11:8], 1'b0};
+assign imm_b_type = {{20{instruction[31]}}, instruction[7], instruction[30:25],  instruction[11:8], 1'b0};
+assign imm_u_type = {instruction[31:12], 12'b0};
+assign imm_j_type = {{12{instruction[31]}}, instruction[19:12], instruction[20], instruction[30:21], 1'b0};
 
+assign optcode = instruction[6:0];
+
+always_comb begin
+    r_type = 1'b0;
+    i_type = 1'b0;
+    s_type = 1'b0;
+    b_type = 1'b0;
+    u_type = 1'b0;
+    j_type = 1'b0;
+    case (optcode)
+        OPTCODE_R_TYPE: 
+            r_type = 1'b1;
+        OPTCODE_I_ALU || OPTCODE_I_LOAD || OPTCODE_I_JALR:
+            i_type = 1'b1;
+        OPTCODE_S_TYPE:
+            s_type = 1'b1;
+        OPTCODE_B_TYPE:
+            b_type = 1'b1;
+        OPTCODE_LUI || OPTCODE_AUIPC:
+            u_type = 1'b1;
+        OPTCODE_JAL:
+            j_type = 1'b1;
+    endcase
+end
+
+assign immediae =   r_type ? 32'b0 :
+                    i_type ? imm_i_type :
+                    s_type ? imm_s_type :
+                    b_type ? imm_b_type :
+                    u_type ? imm_u_type :
+                    imm_j_type;
 
 endmodule
