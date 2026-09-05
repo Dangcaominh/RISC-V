@@ -12,4 +12,23 @@ package risc_pkg;
         OPTCODE_JAL    = 7'h6f
     } optcode_t;
 
+    typedef enum logic [3:0] {
+        ADD,
+        SUB,
+        SLL,
+        SRL,
+        SRA,
+        OR,
+        AND,
+        XOR,
+        SLTU,
+        SLT
+    } alu_opt_t;
+
+    typedef enum logic [1:0] {
+        BYTE = 2'b00,
+        HALF_WORD = 2'b01,
+        WORD = 2'b11
+    } mem_size_t;
+
 endpackage
