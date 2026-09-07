@@ -31,4 +31,13 @@ package risc_pkg;
         WORD = 2'b11
     } mem_size_t;
 
+    typedef enum logic [2:0] {
+        B_BEQ = 3'h0,
+        B_BNE = 3'h1,
+        B_BLT = 3'h4,
+        B_BGE = 3'h5,
+        B_BLTU = 3'h6,
+        B_BGEU = 3'h7
+    } b_type_instr_t;
+
 endpackage
