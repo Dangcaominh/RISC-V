@@ -11,6 +11,9 @@ module alu(
 logic signed [31:0] signed_a;
 logic signed [31:0] signed_b;
 
+assign signed_a = alu_a;
+assign signed_b = alu_b;
+
 always_comb begin
     case(alu_op)
         ADD:
